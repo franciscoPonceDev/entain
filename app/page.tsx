@@ -7,6 +7,7 @@ import { Promotions } from "@/components/promotions";
 import { Features } from "@/components/features";
 import { Footer } from "@/components/footer";
 import { Featured } from "@/components/featured";
+import { MyManager } from "@/components/my-manager";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         <Featured />
         <Benefits />
         <Promotions />
+        <MyManager />
         <Features />
       </main>
       <Footer />

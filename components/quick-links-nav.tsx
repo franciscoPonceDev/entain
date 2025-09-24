@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const quickLinks = [
   { href: "#apostas", label: "Benefícios ONE", icon: faTrophy, sectionId: "apostas" },
   { href: "#promocoes", label: "Promoções Exclusivas", icon: faGift, sectionId: "promocoes" },
-  { href: "#meu-gerente", label: "Meu Gerente", icon: faUserTie, sectionId: "features" },
+  { href: "#meu-gerente", label: "Meu Gerente", icon: faUserTie, sectionId: "meu-gerente" },
   { href: "#sobre-o-clube", label: "Sobre o Clube", icon: faCircleInfo, sectionId: "features" },
 ];
 
