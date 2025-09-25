@@ -35,7 +35,10 @@ export function QuickLinksNav() {
         const atPageBottom =
           Math.ceil(window.innerHeight + window.scrollY) >=
           document.documentElement.scrollHeight;
-        if (atPageBottom) currentSection = quickLinks[quickLinks.length - 1].sectionId;
+        if (atPageBottom) {
+          const last = quickLinks[quickLinks.length - 1];
+          if (last) currentSection = last.sectionId;
+        }
       }
       setActiveSection(currentSection);
     }
