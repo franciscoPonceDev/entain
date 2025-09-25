@@ -3,6 +3,7 @@ import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { QuickLinksNav } from "@/components/quick-links-nav";
 import { Footer } from "@/components/footer";
+import { BottomNav } from "@/components/bottom-nav";
 
 const Featured = dynamic(() => import("@/components/featured").then(m => m.Featured), {
   loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando…</section>,
@@ -38,7 +39,7 @@ export default function Home() {
   return (
     <div className="relative">
       <Header />
-      <main className="mx-auto min-h-dvh max-w-none">
+      <main className="mx-auto min-h-dvh max-w-none pt-14">
         <Hero />
         <QuickLinksNav />
         <Featured />
@@ -49,6 +50,7 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
+      <BottomNav />
     </div>
   );
 }

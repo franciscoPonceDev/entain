@@ -17,7 +17,7 @@ export function Header() {
   return (
     <header
       role="banner"
-      className="sticky top-0 z-40 w-full border-b border-white/10 bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60"
+      className="fixed top-0 left-0 right-0 z-40 w-full border-b border-white/10 bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex h-14 items-center justify-between">

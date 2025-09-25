@@ -17,16 +17,18 @@ const quickLinks = [
 export function QuickLinksNav() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
+  const [isAffixed, setIsAffixed] = useState(false);
+  const [spacerHeight, setSpacerHeight] = useState(0);
+  const initialTopRef = useRef<number | null>(null);
 
   useEffect(() => {
-    function handleScroll() {
-      const anchorY = (navRef.current?.getBoundingClientRect().bottom ?? 65) + 1;
+    function updateActiveSection() {
       let currentSection: string | null = null;
       for (const link of quickLinks) {
         const element = document.getElementById(link.sectionId);
         if (!element) continue;
         const rect = element.getBoundingClientRect();
-        if (rect.top <= anchorY && rect.bottom >= anchorY) {
+        if (rect.top <= 65 && rect.bottom >= 65) {
           currentSection = link.sectionId;
           break;
         }
@@ -35,43 +37,43 @@ export function QuickLinksNav() {
         const atPageBottom =
           Math.ceil(window.innerHeight + window.scrollY) >=
           document.documentElement.scrollHeight;
-        if (atPageBottom) {
-          const last = quickLinks[quickLinks.length - 1];
-          if (last) currentSection = last.sectionId;
-        }
       }
       setActiveSection(currentSection);
     }
 
-    // Use IntersectionObserver only to trigger recalculation quickly on layout/visibility changes
-    const observer = new IntersectionObserver(
-      () => {
-        handleScroll();
-      },
-      {
-        root: null,
-        rootMargin: "-65px 0px 0px 0px",
-        threshold: [0, 0.01, 0.1, 0.25, 0.5, 0.75, 1],
+    const computeAbsoluteTop = (el: HTMLElement | null) => {
+      let top = 0;
+      let node: HTMLElement | null = el;
+      while (node) {
+        top += node.offsetTop || 0;
+        node = (node.offsetParent as HTMLElement) || null;
       }
-    );
+      return top;
+    };
 
-    const observed: HTMLElement[] = [];
-    for (const link of quickLinks) {
-      const el = document.getElementById(link.sectionId);
-      if (el) {
-        observer.observe(el);
-        observed.push(el);
+    const computeMetrics = () => {
+      const el = navRef.current as HTMLElement | null;
+      if (!el) return;
+      setSpacerHeight(el.offsetHeight);
+      initialTopRef.current = computeAbsoluteTop(el);
+    };
+
+    const onScroll = () => {
+      if (initialTopRef.current !== null) {
+        const affixAt = initialTopRef.current - 65;
+        setIsAffixed(window.scrollY >= affixAt);
       }
-    }
+      updateActiveSection();
+    };
 
-    // Scroll listener remains as a fallback and for initial sync
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    computeMetrics();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", computeMetrics);
+    onScroll();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      for (const el of observed) observer.unobserve(el);
-      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", computeMetrics);
     };
   }, []);
 
@@ -91,11 +93,17 @@ export function QuickLinksNav() {
   }
 
   return (
-    <nav
-      ref={navRef}
-      aria-label="Atalhos do Clube ONE"
-      className="sticky top-16 z-30 py-2" // top-16 = 64px
-    >
+    <>
+      <div aria-hidden style={{ height: isAffixed ? spacerHeight : 0 }} />
+      <nav
+        ref={navRef}
+        aria-label="Atalhos do Clube ONE"
+        className={cn(
+          isAffixed
+            ? "fixed top-[65px] left-0 right-0 z-40 py-2"
+            : "relative z-40 py-2"
+        )}
+      >
       <LayoutGroup id="quick-links">
         <ul className="mx-auto flex w-fit max-w-4xl items-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-2 py-2 text-sm text-slate-100 shadow-[0_12px_36px_rgba(0,0,0,0.35)] backdrop-blur-md supports-[backdrop-filter]:bg-slate-900/50">
           {quickLinks.map((item) => (
@@ -169,6 +177,7 @@ export function QuickLinksNav() {
           ))}
         </ul>
       </LayoutGroup>
-    </nav>
+      </nav>
+    </>
   );
 }
