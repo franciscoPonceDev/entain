@@ -6,7 +6,7 @@ export function Promotions() {
     <section 
       id="promocoes" 
       aria-label="Promoções" 
-      className="relative group overflow-hidden text-white py-24 sm:py-32 lg:py-40"
+      className="relative group overflow-hidden text-white py-24 sm:py-32 lg:py-40 lg:min-h-[700px] flex items-center justify-center"
     >
       <div className="absolute inset-0 z-0">
         <Image
@@ -31,7 +31,7 @@ export function Promotions() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl text-center flex flex-col items-center justify-center h-full mb-10">
           <h2 className="text-3xl font-bold tracking-tighter text-brand-gold sm:text-4xl lg:text-5xl">
             PROMOÇÕES EXCLUSIVAS
           </h2>

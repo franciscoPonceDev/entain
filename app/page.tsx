@@ -4,10 +4,11 @@ import { Hero } from "@/components/hero";
 import { QuickLinksNav } from "@/components/quick-links-nav";
 import { Benefits } from "@/components/benefits";
 import { Promotions } from "@/components/promotions";
-import { Features } from "@/components/features";
+import { About } from "@/components/about";
 import { Footer } from "@/components/footer";
 import { Featured } from "@/components/featured";
 import { MyManager } from "@/components/my-manager";
+import { Faq } from "@/components/faq";
 
 export default function Home() {
   return (
@@ -20,7 +21,8 @@ export default function Home() {
         <Benefits />
         <Promotions />
         <MyManager />
-        <Features />
+        <About />
+        <Faq />
       </main>
       <Footer />
       <BottomNav />

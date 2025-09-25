@@ -9,7 +9,7 @@ export function Hero() {
     >
       <div className="mx-auto max-w-7xl px-4 pb-12 pt-2 sm:px-6 sm:pb-16 lg:pt-12">
         <div className="grid grid-cols-1 items-center lg:grid-cols-2">
-          <div className="space-y-4 text-left sm:space-y-6 lg:text-left">
+          <div className="space-y-4 text-left sm:space-y-6 lg:text-left lg:translate-x-36">
             <Image
               src="/Logo.svg"
               alt="Sportingbet ONE"
@@ -18,14 +18,14 @@ export function Hero() {
               className="hidden md:inline-block mx-auto lg:mx-0"
             />
             <h1 className="text-[44px] w-11/12 font-extrabold leading-none text-brand-gold drop-shadow-sm sm:text-5xl lg:text-7xl tracking-tighter">
-              O JOGO ALÉM DO JOGO.
+              O JOGO ALÉM <br/>DO JOGO.
             </h1>
-            <p className="max-w-xl w-11/12 text-slate-200/90  sm:text-lg">
+            <p className="max-w-xl w-11/12 text-slate-200/90  sm:text-xl">
               Você agora é parte do <span className="font-semibold text-white">Sportingbet ONE</span>:<br/> o clube feito para
               quem sabe que <br/><span className="font-semibold text-white">experiências valem tanto quanto resultado</span>.
             </p>
           </div>
-          <div className="relative mx-auto w-full max-w-2xl">
+          <div className="relative mx-auto w-full max-w-2xl lg:-translate-y-16 lg:translate-x-8 lg:scale-95">
             <div className="relative aspect-[16/12] w-full top-1">
               <Image
                 src="/ball-cards+dot.png"

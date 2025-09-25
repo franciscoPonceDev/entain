@@ -1,28 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { PlayCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { YouTubeEmbed } from './youtube-embed'
 
 const desktopImages = [
-    { src: '/Pic Frame (4).png', alt: 'People at a bar', caption: 'Final Libertadores • 2024', className: 'absolute w-[20%] top-[2%] left-[8%]' },
-    { src: '/Pic Frame (5).png', alt: 'Two men smiling', caption: '', className: 'absolute w-[16%] top-[45%] left-[2%]' },
-    { src: '/Pic Frame (3).png', alt: 'Crowd at an event', caption: 'NBA House', className: 'absolute w-[22%] top-0 right-[5%]' },
-    { src: '/Pic Frame (1).png', alt: 'People having dinner', caption: 'Libertadores Buenos Aires • 2024', className: 'absolute w-[18%] top-[42%] right-[10%]', key: 'dinner' },
-    { src: '/Pic Frame (2).png', alt: 'Man with a scarf celebrating', caption: '', className: 'absolute w-[14%] top-[68%] right-[2%]' },
-    { src: '/Pic Frame (1).png', alt: 'People at a party', caption: 'Sportingbet Party • Guests Only', className: 'absolute w-[25%] bottom-0 left-[18%]', key: 'party' },
-];
+  {
+    src: '/Pic Frame (5).png',
+    alt: 'People at a sporting event bar',
+    caption: '',
+    className: 'absolute rounded-lg aspect-[166/281] w-[11.53vw] top-[-10.42vw] left-[-7.64vw] min-[1440px]:w-[166px] min-[1440px]:h-[281px] min-[1440px]:top-[-150px] min-[1440px]:left-[-110px]'
+  },
+  {
+    src: '/Pic Frame (1).png',
+    alt: 'Final Libertadores 2024',
+    caption: 'Final Libertadores • 2024',
+    className: 'absolute rounded-lg aspect-[216/284] w-[15vw] top-[-4.86vw] left-[5.21vw] min-[1440px]:w-[216px] min-[1440px]:h-[284px] min-[1440px]:top-[-70px] min-[1440px]:left-[75px]'
+  },
+  {
+    src: '/Pic Frame.png',
+    alt: 'Sportingbet Party',
+    caption: 'Sportingbet Party • Guests Only',
+    className: 'absolute rounded-lg aspect-[353/265] w-[24.51vw] top-[16.67vw] left-[-3.47vw] min-[1440px]:w-[353px] min-[1440px]:h-[265px] min-[1440px]:top-[240px] min-[1440px]:left-[-50px]'
+  },
+  {
+    src: '/Pic Frame (3).png',
+    alt: 'NBA House',
+    caption: 'NBA House',
+    className: 'absolute rounded-lg aspect-[245/252] w-[17.01vw] top-[-13.19vw] right-[-4.17vw] min-[1440px]:w-[245px] min-[1440px]:h-[252px] min-[1440px]:top-[-190px] min-[1440px]:right-[-60px]'
+  },
+  {
+    src: '/Pic Frame (2).png',
+    alt: 'Libertadores Buenos Aires',
+    caption: 'Libertadores Buenos Aires • 2024',
+    className: 'absolute rounded-lg aspect-[220/259] w-[15.28vw] top-[4.86vw] right-[5.21vw] min-[1440px]:w-[220px] min-[1440px]:h-[259px] min-[1440px]:top-[70px] min-[1440px]:right-[75px]'
+  },
+  {
+    src: '/Pic Frame (4).png',
+    alt: 'Man celebrating at a stadium',
+    caption: '',
+    className: 'absolute rounded-lg aspect-[195/268] w-[13.54vw] top-[12.85vw] right-[-9.03vw] min-[1440px]:w-[195px] min-[1440px]:h-[268px] min-[1440px]:top-[185px] min-[1440px]:right-[-130px]'
+  }
+]
 
-const mobileImages = [
-    { src: '/Pic Frame.png', alt: 'Featured experience 1' },
-    { src: '/Pic Frame (4).png', alt: 'Featured experience 2' },
-    { src: '/Pic Frame (3).png', alt: 'Featured experience 3' },
-];
 
-function ImageCard({ src, alt, className, caption }: { src: string, alt: string, className: string, caption: string }) {
+function ImageCard({ src, alt, className }: { src: string, alt: string, className: string }) {
     return (
-        <div className={cn("relative p-1 rounded-xl bg-black/20 border border-white/10 shadow-lg", className)}>
+        <div className={cn("relative", className)}>
              <div className="relative w-full h-full rounded-lg overflow-hidden">
                 <Image
                     src={src}
@@ -30,11 +56,6 @@ function ImageCard({ src, alt, className, caption }: { src: string, alt: string,
                     fill
                     className="object-cover"
                 />
-                {caption && (
-                    <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-70 text-white p-2 text-center">
-                        <p className="text-xs font-semibold">{caption}</p>
-                    </div>
-                )}
             </div>
         </div>
     )
@@ -46,14 +67,7 @@ function VideoPlayer({ isPlaying, onPlay, variant = 'desktop' }: { isPlaying: bo
 
     if (!isPlaying) {
         return (
-            <div className="relative group cursor-pointer" onClick={onPlay}>
-                <Image
-                    src="/Pic Frame.png"
-                    alt="Featured video thumbnail"
-                    width={800}
-                    height={450}
-                    className={cn("w-full h-auto rounded-lg", thumbShadow)}
-                />
+            <div className="relative group cursor-pointer w-full h-full" onClick={onPlay}>
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-lg">
                     <PlayCircle className={cn("text-white opacity-90 group-hover:opacity-100 transition-opacity", playIconSize)} />
                 </div>
@@ -63,23 +77,106 @@ function VideoPlayer({ isPlaying, onPlay, variant = 'desktop' }: { isPlaying: bo
 
     return (
         <div className="relative aspect-video w-full">
-            <iframe
-                className="absolute inset-0 w-full h-full rounded-lg"
-                src="https://www.youtube.com/embed/d1zfAphCohc?autoplay=1&rel=0&showinfo=0&controls=1"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-            ></iframe>
+            <YouTubeEmbed videoId="d1zfAphCohc" className={cn("w-full h-full")} />
         </div>
     )
 }
 
+function MobileCarousel({ images }: { images: { src: string, alt: string }[] }) {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const trackRef = useRef<HTMLDivElement | null>(null)
+  const isUserInteractingRef = useRef(false)
+  const rafIdRef = useRef<number | null>(null)
+  const resumeTimerRef = useRef<number | null>(null)
+
+  const startAutoScroll = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    isUserInteractingRef.current = false
+    if (rafIdRef.current) return
+    const step = () => {
+      const container = containerRef.current
+      const track = trackRef.current
+      if (container && track && !isUserInteractingRef.current) {
+        const loopWidth = track.scrollWidth / 2
+        if (loopWidth > 0) {
+          container.scrollLeft += 0.25
+          if (container.scrollLeft >= loopWidth) container.scrollLeft -= loopWidth
+        }
+      }
+      rafIdRef.current = window.requestAnimationFrame(step)
+    }
+    rafIdRef.current = window.requestAnimationFrame(step)
+  }
+
+  const stopAutoScroll = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    if (!rafIdRef.current) return
+    window.cancelAnimationFrame(rafIdRef.current)
+    rafIdRef.current = null
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (prefersReducedMotion.matches) return
+    startAutoScroll()
+    return () => stopAutoScroll()
+  }, [])
+
+  const handleInteractionStart = () => {
+    isUserInteractingRef.current = true
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+  }
+
+  const handleInteractionEnd = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = window.setTimeout(() => {
+      startAutoScroll()
+    }, 5000)
+  }
+
+  const handleScroll = () => {
+    const container = containerRef.current
+    const track = trackRef.current
+    if (!container || !track) return
+    const loopWidth = track.scrollWidth / 2
+    if (loopWidth <= 0) return
+    if (container.scrollLeft >= loopWidth) container.scrollLeft -= loopWidth
+    if (container.scrollLeft <= 0) container.scrollLeft += loopWidth
+  }
+
+  const duplicated = [...images, ...images]
+
+  return (
+    <div
+      ref={containerRef}
+      role="region"
+      aria-label="Featured experiences carousel"
+      className="relative mt-4 w-full overflow-x-auto"
+      onPointerDown={handleInteractionStart}
+      onPointerUp={handleInteractionEnd}
+      onMouseEnter={handleInteractionStart}
+      onMouseLeave={handleInteractionEnd}
+      onScroll={handleScroll}
+    >
+      <div ref={trackRef} className="flex w-max">
+        {duplicated.map((image, index) => (
+          <div key={`${image.src}-${index}`} className="flex-shrink-0 mx-1 w-[108px] h-[108px]" role="listitem">
+            <div className="relative w-full h-full overflow-hidden rounded-lg">
+              <Image src={image.src} alt={image.alt} fill className="object-cover" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function Featured() {
-    const [isPlaying, setIsPlaying] = useState(false)
+    const [isPlaying, setIsPlaying] = useState(true)
 
     return (
-        <section className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#132241] to-[#0d172b] text-white py-12 md:py-20">
+        <section className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#132241] to-[#0d172b] text-white py-8 md:pt-22">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-8 md:mb-16">
                     <h2 className="text-2xl md:text-3xl font-bold text-brand-gold tracking-tighter">EXPERIÊNCIAS ONE</h2>
@@ -87,14 +184,16 @@ export function Featured() {
                 </div>
 
                 {/* Desktop Layout */}
-                <div className="hidden md:block relative h-[50vw] max-h-[800px] w-full">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] z-10">
-                        <VideoPlayer isPlaying={isPlaying} onPlay={() => setIsPlaying(true)} />
-                    </div>
+                <div className="hidden md:block">
+                    <div className="relative h-[50vw] max-h-[800px] w-full">
+                        <div className="absolute top-1/2 md:top-40 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] z-10 md:w-[620px] h-[385px]">
+                            <VideoPlayer isPlaying={isPlaying} onPlay={() => setIsPlaying(true)} />
+                        </div>
 
-                    {desktopImages.map(({ key, ...imageProps }) => (
-                        <ImageCard key={key || imageProps.src} {...imageProps} />
-                    ))}
+                        {desktopImages.map(({ caption, ...imageProps }) => (
+                            <ImageCard key={imageProps.src} {...imageProps} />
+                        ))}
+                    </div>
                 </div>
 
                 {/* Mobile Layout */}
@@ -103,21 +202,7 @@ export function Featured() {
                          <VideoPlayer isPlaying={isPlaying} onPlay={() => setIsPlaying(true)} variant="mobile"/>
                     </div>
                     
-                    <div className="flex justify-center gap-2">
-                        {mobileImages.map((image, index) => (
-                            <div key={index} className="relative w-[108px] h-[108px] rounded-[8px] overflow-hidden">
-                                <Image
-                                    src={image.src}
-                                    alt={image.alt}
-                                    fill
-                                    className={cn(
-                                        "object-cover",
-                                        index === 0 && "scale-125"
-                                    )}
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <MobileCarousel images={desktopImages.map(({ src, alt }) => ({ src, alt }))} />
                 </div>
             </div>
         </section>

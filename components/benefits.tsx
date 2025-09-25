@@ -13,6 +13,7 @@ import {
   faGifts,
 } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { useManagerModal } from "@/components/manager-modal-provider";
 
 interface Benefit {
   id: string;
@@ -152,12 +153,13 @@ const allBenefits: { text: string; icon?: string | IconDefinition }[] = [
 
 export function Benefits() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { open } = useManagerModal();
 
   return (
     <section
       id="beneficios"
       aria-label="Benefícios"
-      className="py-12 sm:py-16 lg:py-24 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#132241] to-[#0d172b] text-white"
+      className="py-12 md:py-8 lg:pb-24 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#132241] to-[#0d172b] text-white"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <header className="mb-8 sm:mb-12 text-center">
@@ -209,21 +211,65 @@ export function Benefits() {
         </div>
 
         {isExpanded && (
-            <div className="mt-10 max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                    {allBenefits.map((item) => (
-                        <div key={item.text} className="flex items-center ml-3 md:ml-0 gap-4">
-                            <div className="relative h-10 w-10 shrink-0 border-brand-gold border rounded-full flex items-center justify-center">
-                                {item.icon && (typeof item.icon === 'string' 
-                                    ? <Image src={item.icon} alt="" sizes="16px" width={16} height={16} className="object-contain" />
-                                    : <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-brand-gold" />
-                                )}
-                            </div>
-                            <span className="text-slate-200">{item.text}</span>
-                        </div>
-                    ))}
+          <div className="mt-10 max-w-4xl mx-auto">
+            {/* Mobile/Tablet: 1-2 columns */}
+            <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+              {allBenefits.map((item) => (
+                <div key={item.text} className="flex items-center ml-3 md:ml-0 gap-4">
+                  <div className="relative h-10 w-10 shrink-0 border-brand-gold border rounded-full flex items-center justify-center">
+                    {item.icon && (typeof item.icon === 'string'
+                      ? <Image src={item.icon} alt="" sizes="16px" width={16} height={16} className="object-contain" />
+                      : <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-brand-gold" />
+                    )}
+                  </div>
+                  <span className="text-slate-200">{item.text}</span>
                 </div>
+              ))}
             </div>
+
+            {/* Desktop: 3 columns with 4-5-4 distribution */}
+            <div className="hidden lg:grid grid-cols-3 gap-x-8 gap-y-4">
+              <div className="flex flex-col gap-y-4">
+                {allBenefits.slice(0, 4).map((item) => (
+                  <div key={item.text} className="flex items-center ml-3 md:ml-0 gap-4">
+                    <div className="relative h-10 w-10 shrink-0 border-brand-gold border rounded-full flex items-center justify-center">
+                      {item.icon && (typeof item.icon === 'string'
+                        ? <Image src={item.icon} alt="" sizes="16px" width={16} height={16} className="object-contain" />
+                        : <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-brand-gold" />
+                      )}
+                    </div>
+                    <span className="text-slate-200">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col gap-y-4">
+                {allBenefits.slice(4, 9).map((item) => (
+                  <div key={item.text} className="flex items-center ml-3 md:ml-0 gap-4">
+                    <div className="relative h-10 w-10 shrink-0 border-brand-gold border rounded-full flex items-center justify-center">
+                      {item.icon && (typeof item.icon === 'string'
+                        ? <Image src={item.icon} alt="" sizes="16px" width={16} height={16} className="object-contain" />
+                        : <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-brand-gold" />
+                      )}
+                    </div>
+                    <span className="text-slate-200">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col gap-y-4">
+                {allBenefits.slice(9).map((item) => (
+                  <div key={item.text} className="flex items-center ml-3 md:ml-0 gap-4">
+                    <div className="relative h-10 w-10 shrink-0 border-brand-gold border rounded-full flex items-center justify-center">
+                      {item.icon && (typeof item.icon === 'string'
+                        ? <Image src={item.icon} alt="" sizes="16px" width={16} height={16} className="object-contain" />
+                        : <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-brand-gold" />
+                      )}
+                    </div>
+                    <span className="text-slate-200">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </section>
@@ -232,15 +278,32 @@ export function Benefits() {
 
 function BenefitCard({ item, align = "center" }: { item: Benefit; align?: "left" | "center" }) {
   const isLeft = align === "left";
+  const { open } = useManagerModal();
   return (
     <div
       className={`bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-3 flex md:flex-col items-center ${
         isLeft ? "text-left" : "text-center"
-      } h-full shadow-xl`}
+      } h-full shadow-xl transform-gpu transition-transform duration-300 ease-out lg:hover:-translate-y-[10px]`}
     >
-      {item.icon && <div className={`relative ${item.size === 'small' ? 'h-16 w-16' : 'min-w-[58px] min-h-[58px] self-start mt-2'}`}>
-        <Image src={item.icon} alt="" fill sizes={item.size === 'small' ? '64px' : '80px'} className="object-contain min-w-[58px] min-h-[58px] " />
-      </div>}
+      {item.icon && (
+        <div
+          className={cn(
+            "relative shrink-0 mt-2 lg:mt-3 lg:mx-auto",
+            item.size === "small"
+              ? "h-16 w-16 lg:h-24 lg:w-24"
+              : "h-16 w-16 lg:h-28 lg:w-28",
+            isLeft ? "self-start lg:self-center" : "self-center"
+          )}
+        >
+          <Image
+            src={item.icon}
+            alt=""
+            fill
+            sizes={item.size === "small" ? "(min-width:1024px) 96px, 64px" : "(min-width:1024px) 112px, 64px"}
+            className="object-contain"
+          />
+        </div>
+      )}
       <div className={`flex flex-col ${isLeft ? 'items-start ml-3 md:ml-0' : 'items-center'}`}>
         <h3 className={cn("text-2xl font-bold text-brand-gold", item.icon && "mt-2")}>{item.title}</h3>
         <p className="mt-2 font-medium text-slate-300 flex-grow">{item.description}</p>
@@ -252,6 +315,9 @@ function BenefitCard({ item, align = "center" }: { item: Benefit; align?: "left"
                 ? 'bg-brand-gold   hover:bg-brand-gold/90 text-shadow-gray-950 font-bold'
                 : 'border border-white text-white hover:bg-white/10 font-bold'
             }`}
+            onClick={() => {
+              if (item.button?.text.toLowerCase().includes('gerente')) open();
+            }}
           >
             {item.button.text}
           </Button>
