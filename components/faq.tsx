@@ -156,7 +156,7 @@ export function Faq() {
       answer:
         "Envie a indicação ao seu Gerente ONE. A equipe avaliará o perfil e poderá entrar em contato se houver elegibilidade.",
     },
-  ], [baseId]);
+  ], [baseId, open]);
 
   const [openId, setOpenId] = useState<string | null>(() => `${baseId}-q2`);
 

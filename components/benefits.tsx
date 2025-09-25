@@ -12,7 +12,7 @@ import {
   faBullhorn,
   faGifts,
 } from "@fortawesome/free-solid-svg-icons";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useManagerModal } from "@/components/manager-modal-provider";
 
 interface Benefit {
@@ -153,7 +153,6 @@ const allBenefits: { text: string; icon?: string | IconDefinition }[] = [
 
 export function Benefits() {
   const [isExpanded, setIsExpanded] = useState(true);
-  const { open } = useManagerModal();
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [measuredHeight, setMeasuredHeight] = useState<number>(0);
 

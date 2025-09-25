@@ -62,7 +62,6 @@ function ImageCard({ src, alt, className }: { src: string, alt: string, classNam
 }
 
 function VideoPlayer({ isPlaying, onPlay, variant = 'desktop' }: { isPlaying: boolean, onPlay: () => void, variant?: 'desktop' | 'mobile' }) {
-    const thumbShadow = variant === 'desktop' ? 'shadow-2xl shadow-yellow-400/20' : '';
     const playIconSize = variant === 'desktop' ? 'w-20 h-20 lg:w-24 lg:h-24' : 'w-16 h-16';
 
     if (!isPlaying) {

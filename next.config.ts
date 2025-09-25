@@ -9,7 +9,6 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
   },
-  turbopack: {},
 };
 
 export default nextConfig;
