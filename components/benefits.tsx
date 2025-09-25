@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -152,8 +152,30 @@ const allBenefits: { text: string; icon?: string | IconDefinition }[] = [
 ];
 
 export function Benefits() {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const { open } = useManagerModal();
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [measuredHeight, setMeasuredHeight] = useState<number>(0);
+
+  useLayoutEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    if (isExpanded) {
+      setMeasuredHeight(el.scrollHeight);
+      return;
+    }
+    setMeasuredHeight(0);
+  }, [isExpanded]);
+
+  useEffect(() => {
+    if (!isExpanded || !contentRef.current) return;
+    const el = contentRef.current;
+    const observer = new ResizeObserver(() => {
+      setMeasuredHeight(el.scrollHeight);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isExpanded]);
 
   return (
     <section
@@ -204,14 +226,21 @@ export function Benefits() {
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="inline-flex items-center gap-2 text-lg font-semibold text-white hover:text-slate-200 transition-colors"
                 aria-expanded={isExpanded}
+                aria-controls="benefits-all"
             >
                 Conferir todos os benefícios ONE
                 <ChevronDown className={`w-6 h-6 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
             </button>
         </div>
 
-        {isExpanded && (
-          <div className="mt-10 max-w-4xl mx-auto">
+        <div
+          id="benefits-all"
+          role="region"
+          aria-hidden={!isExpanded}
+          className="mt-10 max-w-4xl mx-auto overflow-hidden transition-[height,opacity] duration-300 ease-out [will-change:height,opacity]"
+          style={{ height: measuredHeight, opacity: isExpanded ? 1 : 0 }}
+        >
+          <div ref={contentRef}>
             {/* Mobile/Tablet: 1-2 columns */}
             <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
               {allBenefits.map((item) => (
@@ -270,7 +299,7 @@ export function Benefits() {
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

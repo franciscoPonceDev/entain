@@ -1,8 +1,6 @@
-"use client";
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faGift, faTrophy, faFutbol, faTicket } from "@fortawesome/free-solid-svg-icons";
@@ -16,8 +14,6 @@ const tabs = [
 ];
 
 export function Header() {
-  const pathname = usePathname();
-
   return (
     <header
       role="banner"

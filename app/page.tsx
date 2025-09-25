@@ -1,14 +1,38 @@
+import dynamic from "next/dynamic";
 import { Header } from "@/components/header";
-import { BottomNav } from "@/components/bottom-nav";
 import { Hero } from "@/components/hero";
 import { QuickLinksNav } from "@/components/quick-links-nav";
-import { Benefits } from "@/components/benefits";
-import { Promotions } from "@/components/promotions";
-import { About } from "@/components/about";
 import { Footer } from "@/components/footer";
-import { Featured } from "@/components/featured";
-import { MyManager } from "@/components/my-manager";
-import { Faq } from "@/components/faq";
+
+const Featured = dynamic(() => import("@/components/featured").then(m => m.Featured), {
+  loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando…</section>,
+  ssr: true,
+});
+
+const Benefits = dynamic(() => import("@/components/benefits").then(m => m.Benefits), {
+  loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando benefícios…</section>,
+  ssr: true,
+});
+
+const Promotions = dynamic(() => import("@/components/promotions").then(m => m.Promotions), {
+  loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando promoções…</section>,
+  ssr: true,
+});
+
+const MyManager = dynamic(() => import("@/components/my-manager").then(m => m.MyManager), {
+  loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando…</section>,
+  ssr: true,
+});
+
+const About = dynamic(() => import("@/components/about").then(m => m.About), {
+  loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando…</section>,
+  ssr: true,
+});
+
+const Faq = dynamic(() => import("@/components/faq").then(m => m.Faq), {
+  loading: () => <section className="mx-auto max-w-7xl px-4 py-12 text-slate-200">Carregando FAQ…</section>,
+  ssr: true,
+});
 
 export default function Home() {
   return (
@@ -25,7 +49,6 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
-      <BottomNav />
     </div>
   );
 }

@@ -29,7 +29,7 @@ const desktopImages = [
     src: '/Pic Frame (3).png',
     alt: 'NBA House',
     caption: 'NBA House',
-    className: 'absolute rounded-lg aspect-[245/252] w-[17.01vw] top-[-13.19vw] right-[-4.17vw] min-[1440px]:w-[245px] min-[1440px]:h-[252px] min-[1440px]:top-[-190px] min-[1440px]:right-[-60px]'
+    className: 'absolute rounded-lg aspect-[245/252] w-[17.01vw] top-[-13.19vw] right-[-4.17vw] min-[1440px]:w-[245px] min-[1440px]:h-[252px] min-[1440px]:top[ -190px] min-[1440px]:right-[-60px]'
   },
   {
     src: '/Pic Frame (2).png',
@@ -87,10 +87,9 @@ function MobileCarousel({ images }: { images: { src: string, alt: string }[] }) 
   const trackRef = useRef<HTMLDivElement | null>(null)
   const isUserInteractingRef = useRef(false)
   const rafIdRef = useRef<number | null>(null)
-  const resumeTimerRef = useRef<number | null>(null)
+  // no resume timer: resume immediately after hover/interaction ends
 
   const startAutoScroll = () => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
     isUserInteractingRef.current = false
     if (rafIdRef.current) return
     const step = () => {
@@ -109,7 +108,6 @@ function MobileCarousel({ images }: { images: { src: string, alt: string }[] }) 
   }
 
   const stopAutoScroll = () => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
     if (!rafIdRef.current) return
     window.cancelAnimationFrame(rafIdRef.current)
     rafIdRef.current = null
@@ -117,22 +115,17 @@ function MobileCarousel({ images }: { images: { src: string, alt: string }[] }) 
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (prefersReducedMotion.matches) return
+    // Always auto slide; pause only on hover/interaction
     startAutoScroll()
     return () => stopAutoScroll()
   }, [])
 
   const handleInteractionStart = () => {
     isUserInteractingRef.current = true
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
   }
 
   const handleInteractionEnd = () => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
-    resumeTimerRef.current = window.setTimeout(() => {
-      startAutoScroll()
-    }, 5000)
+    startAutoScroll()
   }
 
   const handleScroll = () => {
@@ -155,6 +148,7 @@ function MobileCarousel({ images }: { images: { src: string, alt: string }[] }) 
       className="relative mt-4 w-full overflow-x-auto"
       onPointerDown={handleInteractionStart}
       onPointerUp={handleInteractionEnd}
+      onPointerCancel={handleInteractionEnd}
       onMouseEnter={handleInteractionStart}
       onMouseLeave={handleInteractionEnd}
       onScroll={handleScroll}

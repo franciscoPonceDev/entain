@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,13 +28,13 @@ export function BottomNav() {
           <li key={item.href} className="flex-1">
             <Link
               href={item.href}
-              className="group flex flex-col items-center gap-1 rounded-md px-2 py-1.5 text-center text-[11px] font-medium text-slate-300 outline-none ring-amber-300/50 focus-visible:ring-2"
+              className="group flex flex-col items-center gap-1 rounded-md px-2 py-1.5 text-center text-[11px] font-medium text-slate-300 outline-none ring-brand-gold/50 focus-visible:ring-2"
               aria-label={item.label}
               tabIndex={0}
             >
               <FontAwesomeIcon
                 icon={item.icon}
-                className="h-5 w-5 text-amber-300 transition-colors group-hover:text-amber-200"
+                className="h-5 w-5 text-brand-gold transition-colors group-hover:text-amber-200"
               />
               <span className="leading-tight">{item.label}</span>
             </Link>

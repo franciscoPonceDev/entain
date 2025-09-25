@@ -108,7 +108,7 @@ export function Footer() {
               width={103}
               height={80}
               className="h-14 w-auto sm:h-16"
-              priority
+              loading="lazy"
             />
             <Image
               src="/sudamerica.png"
@@ -116,7 +116,7 @@ export function Footer() {
               width={102}
               height={80}
               className="h-14 w-auto sm:h-16"
-              priority
+              loading="lazy"
             />
             </div>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-8 sm:gap-10">
@@ -126,6 +126,7 @@ export function Footer() {
               width={40}
               height={40}
               className="h-10 w-auto"
+              loading="lazy"
             />
             <Image
               src="/Responsible Gaming.png"
@@ -133,6 +134,7 @@ export function Footer() {
               width={40}
               height={40}
               className="h-10 w-auto"
+              loading="lazy"
             />
             
           </div>
